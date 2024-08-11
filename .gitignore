@@ -391,6 +391,5 @@ gradle-app.setting
 .classpath
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,forgegradle,kotlin,macos,intellij,intellij+all,eclipse,visualstudiocode
-src/main/resources/assets/rsmutils/image/js.png
-src/main/java/rice/riceskyblockmod/Reference.java
 gradle.properties
+src/main/java/ricedotwho/mf/Reference.java

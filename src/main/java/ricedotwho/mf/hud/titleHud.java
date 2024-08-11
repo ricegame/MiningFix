@@ -6,7 +6,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class titleHud extends SingleTextHud {
     @Switch(
-            name = "RSM Title"
+            name = "MF Title"
     )
     public boolean yes;
 
@@ -20,7 +20,7 @@ public class titleHud extends SingleTextHud {
     }
     @Override
     public String getText(boolean example) {
-        if(example) return (EnumChatFormatting.RED + "RSM Title");
+        if(example) return (EnumChatFormatting.RED + "MF Title");
         return titleClass.titleText;
     }
 }

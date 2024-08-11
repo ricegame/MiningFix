@@ -13,14 +13,12 @@ public class ModConfig extends Config {
     @Switch(
             name = "Ability Ready Alert",
             description = "Creates a title",
-            size = OptionSize.SINGLE,
             category = "Mining"
     )
     public static boolean miningAbilityAlert = false;
     @Switch(
             name = "Drill Fix",
             description = "Fixes the mining progress reset",
-            size = OptionSize.SINGLE,
             category = "Mining",
             subcategory = "Fixes"
     )
@@ -28,15 +26,13 @@ public class ModConfig extends Config {
     @Switch(
             name = "Pingless Mining",
             description = "Attempts to make a better mining experience",
-            size = OptionSize.SINGLE,
             category = "Mining",
             subcategory = "Pingless"
     )
     public static boolean pinglessMining = false;
     @Switch(
             name = "Allow Hardstone",
-            description = "Be warned this may flag, have not tested",
-            size = OptionSize.SINGLE,
+            description = "Be warned this may flag, have not tested (NYI)",
             category = "Mining",
             subcategory = "Pingless"
     )
@@ -44,31 +40,28 @@ public class ModConfig extends Config {
     @Switch(
             name = "Fix breaking progress",
             description = "Makes breaking progress look like 0 ping",
-            size = OptionSize.SINGLE,
             category = "Mining",
             subcategory = "Pingless"
     )
-    public static boolean fixBreakingProgress = false;
+    public static boolean fixBreakingProgress = true;
     @Switch(
             name = "Pingless breaking sound",
             description = "Plays the breaking sound when pingless things you've broken the block, blocks the vanilla sound",
-            size = OptionSize.SINGLE,
             category = "Mining",
             subcategory = "Pingless"
     )
-    public static boolean pinglessSound = false;
+    public static boolean pinglessSound = true;
     @Switch(
             name = "Use Mining Speed from Tablist",
-            description = "Uses the Mining Speed from the tablist",
-            size = OptionSize.SINGLE,
+            description = "Uses the Mining Speed from the tablist (Overrides the set Mining Speed option)",
             category = "Mining",
             subcategory = "Pingless"
     )
-    public static boolean tablistMiningSpeed = false;
+    public static boolean tablistMiningSpeed = true;
 
     @Number(
             name = "Mining Speed",
-            description = "USE GEMSTONE SPEED FOR GEMSTONE (use coleweight or do 'miningSpeed = 50 + (professionalLevel*5)')",
+            description = "Enter your mining speed from the profile bit, dont include gemstones :)",
             min = 1, max = 50000,
             size = OptionSize.DUAL,
             category = "Mining",
@@ -101,8 +94,7 @@ public class ModConfig extends Config {
     public static int miningSpeedBoost = 1;
     @Switch(
             name = "Api requests",
-            description = "Sends api requests to get ur ms and mf",
-            size = OptionSize.SINGLE,
+            description = "Sends api requests to get ur ms and mf (NYI)",
             category = "Mining",
             subcategory = "Pingless"
     )
@@ -115,41 +107,39 @@ public class ModConfig extends Config {
             subcategory = "Pingless"
     )
     public static float apiInterval = 5f;
-    @HUD(
-            name = "Title HUD",
-            category = "HUD",
-            subcategory = "Title HUD"
-    )
-    public titleHud titleHud = new titleHud();
     @Switch(
             name = "Dev override",
             description = "developer purploses",
-            size = OptionSize.SINGLE,
             category = "Dev"
     )
     public static boolean devOverride = false;
     @Switch(
             name = "Force not in skyblock",
             description = "developer purploses",
-            size = OptionSize.SINGLE,
             category = "Dev"
     )
     public static boolean forceNotSkyblock = false;
     @Switch(
             name = "Dev info",
             description = "Sends additionally info to chat",
-            size = OptionSize.SINGLE,
             category = "Dev"
     )
     public static boolean devInfo = false;
     @Text(
             name = "Custom API Key",
-            description = "Overrides the mod api, only use this if you know what ur doing. If this doesnt work try /rsm setkey {API_KEY}",
-            size = OptionSize.SINGLE,
+            description = "Overrides the mod api, only use this if you know what ur doing.",
             secure = true, multiline = true,
             category = "Dev"
     )
     public static String customApiKey = "";
+
+    // yapology
+    @HUD(
+            name = "Title HUD",
+            category = "HUD",
+            subcategory = "Title HUD"
+    )
+    public titleHud titleHud = new titleHud();
 
     public ModConfig() {
         super(new Mod("Mining Fix", ModType.SKYBLOCK), "mfconfig.json");
@@ -162,5 +152,14 @@ public class ModConfig extends Config {
         addDependency("fixBreakingProgress","pinglessMining");
         addDependency("miningSpeed","pinglessMining");
         addDependency("tablistMiningSpeed","pinglessMining");
+        addDependency("pinglessSound","pinglessMining");
+        addDependency("profLevel","pinglessMining");
+        addDependency("extraTicks","pinglessMining");
+        addDependency("miningSpeedBoost","pinglessMining");
+
+        // Disabled / NYI
+        addDependency("allowHardstone","devOverride");
+        addDependency("apiRequests","devOverride");
+        addDependency("apiInterval","devOverride");
     }
 }
