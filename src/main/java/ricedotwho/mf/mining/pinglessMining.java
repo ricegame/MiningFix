@@ -14,6 +14,8 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Mouse;
 import ricedotwho.mf.config.ModConfig;
+import ricedotwho.mf.data.ApiData;
+import ricedotwho.mf.events.BlockChangedEvent;
 import ricedotwho.mf.events.OnTimeEvent;
 import ricedotwho.mf.events.packetEvent;
 import ricedotwho.mf.hud.titleClass;
@@ -26,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ricedotwho.mf.mf.devInfoMessage;
+import static ricedotwho.mf.mf.sendMessageWithPrefix;
 
 public class pinglessMining {
     static Minecraft mc;
@@ -46,16 +49,16 @@ public class pinglessMining {
     }
     public static BlockPos currentBlock = null;
     private static BlockPos lastBlock = null;
-    private static BlockPos lastBlockPlayerPos = null;
     public static int currentProgress = 0;
     private Integer tablistMiningSpeed = 0;
     private Integer currentTicks = 0;
     private Integer ticksNeeded = 0;
     private boolean miningSpeedBoost = false;
+    boolean playingSound = false;
     @SubscribeEvent
     public void onServerTick(packetEvent.ReceiveEvent event) {
         if(event.packet instanceof S32PacketConfirmTransaction) {
-            if(!ModConfig.pinglessMining && !(Utils.inMines || Utils.inHollows)) return;
+            if(!ModConfig.pinglessMining || !(Utils.inMines || Utils.inHollows)) return;
             BlockPos oldBlock = currentBlock;
             currentBlock = Utils.lookingAt();
             if(!Objects.equals(currentBlock, oldBlock)) blockChanged();
@@ -74,14 +77,13 @@ public class pinglessMining {
             if(currentTicks >= ticksNeeded) {
                 ticksNeeded = 0;
                 lastBlock = currentBlock;
-                lastBlockPlayerPos = new BlockPos(Math.floor(mc.thePlayer.posX), Math.floor(mc.thePlayer.posY), Math.floor(mc.thePlayer.posZ));
 
                 if(Utils.inHollows) {
                     mc.theWorld.setBlockToAir(currentBlock);
                 } else {
-                    mc.theWorld.setBlockState(currentBlock, Blocks.bedrock.getDefaultState());
+                    mc.theWorld.setBlockState(currentBlock, Blocks.bedrock.getStateFromMeta(0));
                 }
-                if(ModConfig.fixBreakingProgress) { mc.theWorld.playSoundAtPos(currentBlock.up(1), "dig.glass", 1, 0.7936508059501648f, false); }
+                //if(ModConfig.fixBreakingProgress && ModConfig.pinglessSound) { mc.theWorld.playSoundAtPos(currentBlock.up(1), "dig.glass", 1, 0.7936508059501648f, false); }
             }
 
             currentTicks++;
@@ -111,13 +113,17 @@ public class pinglessMining {
         int hardness = miningData.MINING_HARDNESS.get((blockId == 160 ? 95 : blockId) + ":" + blockMeta); // panes are a pain
         int raw_ticks = getRawTicks(hardness);
 
-        ticksNeeded = (raw_ticks <= 4 && raw_ticks > 1 ? 4 : raw_ticks) + ModConfig.extraTicks;
+        ticksNeeded = Math.max((raw_ticks <= 4 && raw_ticks > 1 ? 4 : raw_ticks), 1); // Prevent 0 ticks
     }
+    //todo: bluew cheese support
     private int getRawTicks(int hardness) {
-        int ms = (ModConfig.tablistMiningSpeed ? (tablistMiningSpeed > 0 ? tablistMiningSpeed : ModConfig.miningSpeed) : ModConfig.miningSpeed) + (ModConfig.profLevel > 0 ? 50 + (ModConfig.profLevel * 5) : 0);
-        int halfBakedSpeed = miningSpeedBoost ? (ms * (ModConfig.miningSpeedBoost)) : ms;
+        ApiData apiData = miningStats.getApiData();
+        int ms = tablistMiningSpeed + (isGemstone() ? apiData.professional : 0);
+        int halfBakedSpeed = miningSpeedBoost ? (ms * (1 + apiData.msBoost /* + blueCheese */)) : ms;
         int miningSpeed = (mc.thePlayer.onGround || !mc.thePlayer.isInWater()) ? halfBakedSpeed : halfBakedSpeed / 5;
-        return (int) Math.floor((float) (30 * hardness) / miningSpeed);
+        int ticks = Math.round((float) (30 * hardness) / miningSpeed) + ModConfig.extraTicks;
+        devInfoMessage("Mining Speed: " + miningSpeed + " Ticks: " + ticks);
+        return ticks;
     }
 
     public static boolean should() {
@@ -126,10 +132,10 @@ public class pinglessMining {
         if(heldItem == null) return false;
         if(!miningData.MINING_ITEMS.contains(heldItem.getItem())) return false;
         IBlockState block = mc.theWorld.getBlockState(currentBlock);
-        if(!Utils.equalsOneOf(block.getBlock(), Blocks.stained_glass, Blocks.stained_glass_pane)) {return false;}
         int blockId = Block.getIdFromBlock(block.getBlock());
         int blockMeta = block.getBlock().getMetaFromState(block);
-        return miningData.MINING_HARDNESS.containsKey((blockId == 160 ? 95 : blockId) + ":" + blockMeta) || (ModConfig.allowHardstone && blockId == 1 && Utils.inHollows);
+        if(!ModConfig.allowHardstone && blockId == 1) return false;
+        return miningData.MINING_HARDNESS.containsKey((blockId == 160 ? 95 : blockId) + ":" + blockMeta);
     }
     private static boolean isGemstone() {
         if (currentBlock == null) return false;
@@ -140,12 +146,13 @@ public class pinglessMining {
     public void onRender(RenderWorldLastEvent event) {
         if(!ModConfig.fixBreakingProgress || !ModConfig.pinglessMining || !Utils.inHollows) return;
         if(currentTicks != 0 && ticksNeeded != 0) {
-            currentProgress = Math.round(((float) currentTicks / ticksNeeded) * 9);
+            currentProgress = (int) Math.floor(((float) currentTicks / ticksNeeded) * 9);
         } else { currentProgress = 9; }
     }
     @SubscribeEvent
     public void onSecond(OnTimeEvent.Second event) {
-        if(!ModConfig.pinglessMining || !ModConfig.tablistMiningSpeed || miningSpeedBoost) return;
+        if(!ModConfig.pinglessMining || miningSpeedBoost || !(Utils.inMines || Utils.inHollows)) return;
+
         if(mc.theWorld == null) return;
         List<String> tabLines = tablistUtils.readTabList();
         for(String line : tabLines) {
@@ -156,17 +163,25 @@ public class pinglessMining {
                 devInfoMessage("Tablist speed: " + tablistMiningSpeed);
             }
         }
+        if(tablistMiningSpeed == 0) { sendMessageWithPrefix(EnumChatFormatting.RED + "Enable mining speed widget or MF wont work! (/widget -> Stats Widget -> Shown Stats -> Mining Speed)"); }
     }
+    //todo: figure out how to make this work with the new sound playing code
+    // Current method is scuffed, but if it works, it works
     @SubscribeEvent
     public void onSound(PlaySoundEvent event) {
         if(!ModConfig.pinglessSound && !ModConfig.fixBreakingProgress || !ModConfig.pinglessMining || !Utils.inHollows) return;
-        if(Objects.equals(event.name, "dig.glass") && lastBlock != null && lastBlockPlayerPos != null) {
-            float sX = event.sound.getXPosF(); float sY = event.sound.getYPosF(); float sZ = event.sound.getZPosF();
-            BlockPos soundPos = new BlockPos(event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF());
-            devInfoMessage("Player: " + lastBlockPlayerPos.toString() + " Sound: " + soundPos);
-            if(!Objects.equals(soundPos, lastBlock.up(1))) {
-                event.result = null;
-            }
+        if(Objects.equals(event.name, "dig.glass") && !playingSound) {
+            event.result = null;
         }
+    }
+    @SubscribeEvent
+    public void onBlockChange(BlockChangedEvent event) {
+        if(!ModConfig.pinglessSound || !ModConfig.pinglessMining || !ModConfig.fixBreakingProgress || !(Utils.inMines || Utils.inHollows)) return;
+        if(!Utils.isWithinRadius(event.getPos(), mc.thePlayer.getPosition(), 16)) return;
+        if(!(   Utils.equalsOneOf(event.getOldState().getBlock(), Blocks.stained_glass,Blocks.stained_glass_pane)
+                && event.getNewState().getBlock().equals(Blocks.air))) return;
+        playingSound = true;
+        mc.theWorld.playSoundAtPos(currentBlock.up(1), "dig.glass", 1, 0.7936508059501648f, false);
+        playingSound = false;
     }
 }

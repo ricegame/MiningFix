@@ -5,6 +5,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
+import ricedotwho.mf.mining.miningStats;
 import ricedotwho.mf.utils.itemUtils;
 import ricedotwho.mf.utils.tablistUtils;
 
@@ -75,6 +76,10 @@ public class mfCommands extends CommandBase {
 					sendMessage(tablistUtils.readTabList().toString());
 				} else if (args[1].equalsIgnoreCase("inv")) {
 					sendMessage(Arrays.toString(mc.thePlayer.inventory.armorInventory));
+				}
+				else if (args[1].equalsIgnoreCase("api")) {
+					sendMessageWithPrefix("Trying to get API");
+					miningStats.getMiningCore();
 				}
 			} else {
 				mf.sendMessageUnknown(args[0]);

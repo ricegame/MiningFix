@@ -1,7 +1,7 @@
 {
   "compatibilityLevel": "JAVA_8",
   "minVersion": "0.7",
-  "package": "rice.mf.mixin",
+  "package": "ricedotwho.mf.mixin",
   "refmap": "mixins.mf.refmap.json",
   "injectors": {
     "maxShiftBy": 5
@@ -9,7 +9,8 @@
   "client": [
     "AccessorRenderManager",
     "PlayerControllerMPMixin",
-    "block.DestroyBlockProgressMixin"
+    "block.DestroyBlockProgressMixin",
+    "world.WorldMixin"
   ],
   "verbose": true
 }

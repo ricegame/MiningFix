@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import ricedotwho.mf.config.ModConfig;
 import ricedotwho.mf.events.OnTimeEvent;
 import ricedotwho.mf.handlers.packetHandler;
+import ricedotwho.mf.mining.miningStats;
 import ricedotwho.mf.mining.pinglessMining;
 import ricedotwho.mf.utils.RiceChatComponent;
 import ricedotwho.mf.utils.Utils;
@@ -25,7 +26,7 @@ public class mf {
 
 	public static ModConfig config;
 	public static final Minecraft mc;
-
+	private boolean inSkyblock = false;
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -39,6 +40,7 @@ public class mf {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		ticker.startRunning();
+		miningStats.startRunning();
 	}
 	@SubscribeEvent
 	public void onServerConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
@@ -58,6 +60,17 @@ public class mf {
 	@SubscribeEvent
 	public void onSecond(OnTimeEvent.Second event) {
 		Utils.checkLocation();
+		devInfoMessage("second");
+
+		/*
+		if(Utils.inSkyblock != inSkyblock) {
+			if(Utils.inSkyblock) {
+				SkyblockEvent.Joined.postAndCatch();
+			} else {
+				SkyblockEvent.Left.postAndCatch();
+			}
+		}
+		 */
 	}
     public static void sendMessage(final String message) {
 		if(mc.thePlayer == null) return;

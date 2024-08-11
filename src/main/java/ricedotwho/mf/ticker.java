@@ -32,7 +32,6 @@ public class ticker {
             OnTimeEvent.Second.postAndCatch();
             tps = ticksThisSecond > 20 ? 20 : ticksThisSecond;
             ticksThisSecond = 0;
-            mf.devInfoMessage("Tps: " + tps);
         }
     };
     public static void startRunning() {

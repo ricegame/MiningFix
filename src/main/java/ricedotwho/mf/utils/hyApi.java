@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static ricedotwho.mf.mf.devInfoMessage;
+
 public class hyApi {
     static String API_KEY_CONST = ""; // It was expired anyway
     public static String API_KEY = "";
@@ -29,7 +31,7 @@ public class hyApi {
         } else {
             API_KEY = ModConfig.customApiKey;
         }
-        mf.devInfoMessage("Api key updated: " + API_KEY);
+        devInfoMessage("Api key updated: " + API_KEY);
     }
 
     public boolean getStatus(String name) throws IOException {
@@ -100,7 +102,7 @@ public class hyApi {
         return g.fromJson(jsonStr.toString(), JsonObject.class);
     }
 
-    private StringBuilder readInput(HttpURLConnection connection) throws IOException {
+    private static StringBuilder readInput(HttpURLConnection connection) throws IOException {
         String read = null;
         InputStreamReader isrObj = new InputStreamReader(connection.getInputStream());
         BufferedReader bf = new BufferedReader(isrObj);
@@ -124,7 +126,7 @@ public class hyApi {
         bf.close();
         return responseStr;
     }
-    public String getUUID(String name) throws IOException {
+    public static String getUUID(String name) throws IOException {
         URL urlForGetReq = new URL(MOJANG_UUID + name);
         HttpURLConnection connection = (HttpURLConnection) urlForGetReq.openConnection();
         connection.setRequestMethod("GET");
@@ -188,17 +190,19 @@ public class hyApi {
         Scanner scanner = null;
         try {
             conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("User-Agent", ST_AGENT);
 
             int codeResponse = conn.getResponseCode();
             if (codeResponse != HttpURLConnection.HTTP_OK) {
-                mf.sendMessageWithPrefix(EnumChatFormatting.RED + "Get request for dungeon data failed!");
+                mf.sendMessageWithPrefix(EnumChatFormatting.RED + "Get request for data failed!");
                 return null;
             }
 
             scanner = new Scanner(conn.getInputStream());
             String responseJson = scanner.useDelimiter("\\A").next();
+            conn.disconnect();
 
             JsonObject data = new JsonParser().parse(responseJson).getAsJsonObject();
             for (JsonElement profileElement : data.getAsJsonArray("profiles")) {

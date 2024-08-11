@@ -84,7 +84,9 @@ public class Utils {
 		inSkyblock = false;
 	}
 
-
+	public static int calculateDistFast(BlockPos pos1, BlockPos pos2) {
+		return calculateDistFast(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ());
+	}
 	public static int calculateDistFast(int x1, int y1, int z1, int x2, int y2, int z2) {
 		int x = x2 - x1;
 		int y = y2 - y1;
@@ -128,5 +130,11 @@ public class Utils {
 	public static void executeWithTicks(Runnable task, int ticks) {
 		long delayMillis = ticks * TICK_DURATION_MS;
 		scheduler.schedule(task, delayMillis, TimeUnit.MILLISECONDS);
+	}
+	public static boolean isWithinRadius(BlockPos pos1, BlockPos pos2, int radius) {
+		double distanceSq = pos2.distanceSq(pos1);
+		double radiusSq = radius * radius;
+
+		return distanceSq <= radiusSq;
 	}
 }

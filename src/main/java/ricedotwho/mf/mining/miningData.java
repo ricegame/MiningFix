@@ -39,9 +39,13 @@ public class miningData {
         MINING_HARDNESS.put("168:1", 800); // Prismarine Bricks
         MINING_HARDNESS.put("168:2", 800); // Dark Prismarine
 
-        MINING_HARDNESS.put("35:3", 1500); // Light Blue Wool
+        MINING_HARDNESS.put("35:3", 1_500); // Light Blue Wool
+
+        MINING_HARDNESS.put("1:4", 2_000); // Titanium
 
         // Crystal Hollows
+        MINING_HARDNESS.put("1:0", 50); // Hardstone
+
         MINING_HARDNESS.put("95:1", 3_000); // Amber
         MINING_HARDNESS.put("95:2", 4_800); // Jasper
         MINING_HARDNESS.put("95:3", 3_000); // Sapphire
