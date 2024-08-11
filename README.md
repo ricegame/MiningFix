@@ -1,6 +1,6 @@
 <h1>Mining Fix</h1>
 <p style="font-size: larger">
-*Fixes* some issues with mining in hypixel skyblock 
+<em>Fixes</em> some issues with mining in hypixel skyblock 
 </p>
 
 <details>
