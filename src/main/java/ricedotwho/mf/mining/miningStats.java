@@ -25,6 +25,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
 
+//todo: this actually sucks. rewrite / delete and just use tablist.
+// actually I only need to get their hotm tree for the mining speed boost and professional perks :) shouldn't be so bad ... right?
 public class miningStats {
     public static Point msAndBoost = new Point(0,0);
     static int miningSpeed = 0;

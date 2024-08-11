@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//todo: make this cleaner. rn its 92.5% chatgpt
 public class miningData {
     public static final Map<String, Integer> MINING_TALISMAN = new HashMap<>();
     public static final Map<String, Integer> PET_MS = new HashMap<>();

@@ -11,6 +11,11 @@ import ricedotwho.mf.utils.itemUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Taken from Hot-Shirtless-Men under the MIT License
+ * https://github.com/Rekteiru/Hot-Shirtless-Men/blob/main/LICENSE
+ * @author Rekteiru
+ */
 public class drillFix {
     static Minecraft mc;
     static List<Item> items = new ArrayList<>();

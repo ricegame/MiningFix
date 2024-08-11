@@ -1,6 +1,8 @@
 <h1>Mining Fix</h1>
 <p style="font-size: larger">
-<em>Fixes</em> some issues with mining in hypixel skyblock 
+<em>Fixes</em> some issues with mining in hypixel skyblock
+
+while I dont think it is, this is probably bannable, if you get banned for using this that's a major skill issue tbh
 </p>
 
 <details>

@@ -1,6 +1,7 @@
 package ricedotwho.mf.utils;
 
 public class hyUtils {
+    // Data from Cowlection (tysm)
     private static final int PET_MAX_XP_LEG = 25353230;
     private static final int[] PET_XP_LEG = {
             0, 660, 1390, 2190, 3070, 4030, 5080, 6230, 7490, 8870,  // 1-10
@@ -15,20 +16,18 @@ public class hyUtils {
             12622930, 13639630, 14741330, 15933030, 17219730, 18606430, 20103130, 21719830, 23466530, 25353230  // 91-100
     };
     public static int findClosestLevel(int target, boolean gdrag) {
-        if (target > PET_MAX_XP_LEG && gdrag) {
+        if (target >= PET_MAX_XP_LEG && gdrag) {
             int overflowExp = target - PET_MAX_XP_LEG;
-            int overflowLvl;
+            int overflowLvl = 1;
             if (overflowExp >= 1) {
                 overflowLvl = 2;
                 overflowExp = overflowExp - 1;
-            } else {
-                overflowLvl = 1;
             }
             return 100 + overflowLvl + Math.min(98, (int) (overflowExp / 1886700.0));
         }
 
         // Find the index of the closest level
-        int closestIndex = findClosestIndex(PET_XP_LEG, target);
+        int closestIndex = findClosestIndex(target);
 
         // Ensure it returns the current level if target is closer to the next level
         if (target < PET_XP_LEG[closestIndex] && closestIndex > 0) {
@@ -36,12 +35,12 @@ public class hyUtils {
         }
         return closestIndex + 1;
     }
-    private static int findClosestIndex(int[] array, int target) {
+    private static int findClosestIndex(int target) {
         // Find the index of the closest value to the target
         int closestIndex = 0;
         int minDiff = Integer.MAX_VALUE;
-        for (int i = 0; i < array.length; i++) {
-            int diff = Math.abs(array[i] - target);
+        for (int i = 0; i < hyUtils.PET_XP_LEG.length; i++) {
+            int diff = Math.abs(hyUtils.PET_XP_LEG[i] - target);
             if (diff < minDiff) {
                 minDiff = diff;
                 closestIndex = i;

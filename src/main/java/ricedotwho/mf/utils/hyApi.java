@@ -16,8 +16,8 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class hyApi {
-    static String API_KEY_CONST = "dc6e292f-6741-4279-8130-3e0d78757a8a";
-    public static String API_KEY = "dc6e292f-6741-4279-8130-3e0d78757a8a";
+    static String API_KEY_CONST = ""; // It was expired anyway
+    public static String API_KEY = "";
     static String MOJANG_UUID = "https://api.mojang.com/users/profiles/minecraft/";
     static String STATUS_URL = "https://api.hypixel.net/v2/status";
     static String DUNGEON_DATA = "https://api.icarusphantom.dev/v1/sbecommands/cata/%s/selected";
