@@ -25,6 +25,7 @@ import ricedotwho.mf.utils.TablistUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,8 +95,9 @@ public class PinglessMining {
             Matcher activate = activatePattern.matcher(message);
             Matcher deactivate = expirePattern.matcher(message);
             Matcher ready = readyPattern.matcher(message);
-            if(activate.find()) { if(Objects.equals(activate.group(1), "Mining Speed Boost")){ miningSpeedBoost = true; } }
-            if(deactivate.find()) { if(Objects.equals(deactivate.group(1), "Mining Speed Boost")){ miningSpeedBoost = false; } }
+            if(activate.find()) { if(Objects.equals(activate.group(1), "Mining Speed Boost")){ miningSpeedBoost = true; }}
+            if(deactivate.find()) { if(Objects.equals(deactivate.group(1), "Mining Speed Boost")){ Utils.executeWithDelay(() -> miningSpeedBoost = false, 5, TimeUnit.SECONDS); }} // tablist takes so long to update :sob:
+
             if(ready.find() && ModConfig.miningAbilityAlert) {
                 TitleClass.createTitle(EnumChatFormatting.GOLD + ready.group(1), 3000);
                 mc.thePlayer.playSound("note.pling",1f,1f);
@@ -114,7 +116,7 @@ public class PinglessMining {
         int hardness = MiningData.MINING_HARDNESS.get((blockId == 160 ? 95 : blockId) + ":" + blockMeta); // panes are a pain
         int raw_ticks = getRawTicks(hardness);
 
-        ticksNeeded = Math.max((raw_ticks <= 4 && raw_ticks > 1 ? 4 : raw_ticks), 1); // Prevent 0 ticks
+        ticksNeeded = Math.max((raw_ticks <= 4 && raw_ticks > 1 ? 4 : raw_ticks), 2); // Prevent 0 and 1 ticks, 1 ticks make ghostblocks and is inconsistent
     }
     //todo: bluew cheese support
     private int getRawTicks(int hardness) {

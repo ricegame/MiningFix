@@ -13,3 +13,8 @@
  - Fixed pinglessSounds not playing sometimes
  - Fixed a typo causing mixins to fail loading in v1.0.1
 
+(v1.1.1) — Bugfix (12/08/2024):
+- Hardstone mode now breaks hardstone in 2 ticks to avoid ghostblocks
+- Made sounds better
+- Added option to disable the exp gain sound
+
