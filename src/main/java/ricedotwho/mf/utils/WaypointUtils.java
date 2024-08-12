@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class waypointUtils {
+public class WaypointUtils {
     private static final ResourceLocation beaconBeam = new ResourceLocation("textures/entity/beacon_beam.png");
 
     /**

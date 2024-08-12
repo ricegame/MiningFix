@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-public class itemUtils {
+public class ItemUtils {
     /**
      * Returns the Skyblock Item ID of a given Skyblock item
      *

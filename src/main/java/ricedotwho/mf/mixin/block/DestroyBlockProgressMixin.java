@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ricedotwho.mf.config.ModConfig;
-import ricedotwho.mf.mining.pinglessMining;
+import ricedotwho.mf.mining.PinglessMining;
 import ricedotwho.mf.mf;
 
 import java.util.Map;
@@ -25,8 +25,8 @@ public abstract class DestroyBlockProgressMixin {
     public void drawBlockDamageTexture(Tessellator tessellatorIn, WorldRenderer worldRendererIn, Entity entityIn, float partialTicks, CallbackInfo ci) {
         if(!ModConfig.fixBreakingProgress || !ModConfig.pinglessMining) return;
         for(DestroyBlockProgress block : damagedBlocks.values()) {
-            if(!Objects.equals(entityIn, mf.mc.thePlayer) || !pinglessMining.should()) continue;
-            block.setPartialBlockDamage(pinglessMining.currentProgress);
+            if(!Objects.equals(entityIn, mf.mc.thePlayer) || !PinglessMining.should()) continue;
+            block.setPartialBlockDamage(PinglessMining.currentProgress);
         }
     }
 }

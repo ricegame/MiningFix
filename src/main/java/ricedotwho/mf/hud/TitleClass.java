@@ -1,6 +1,6 @@
 package ricedotwho.mf.hud;
 
-public class titleClass {
+public class TitleClass {
     static boolean running = false;
     public static String titleText = "";
     public static void createTitle(String text, long duration) {

@@ -1,6 +1,6 @@
 package ricedotwho.mf.utils;
 
-public class hyUtils {
+public class HyUtils {
     // Data from Cowlection (tysm)
     private static final int PET_MAX_XP_LEG = 25353230;
     private static final int[] PET_XP_LEG = {
@@ -39,8 +39,8 @@ public class hyUtils {
         // Find the index of the closest value to the target
         int closestIndex = 0;
         int minDiff = Integer.MAX_VALUE;
-        for (int i = 0; i < hyUtils.PET_XP_LEG.length; i++) {
-            int diff = Math.abs(hyUtils.PET_XP_LEG[i] - target);
+        for (int i = 0; i < HyUtils.PET_XP_LEG.length; i++) {
+            int diff = Math.abs(HyUtils.PET_XP_LEG[i] - target);
             if (diff < minDiff) {
                 minDiff = diff;
                 closestIndex = i;

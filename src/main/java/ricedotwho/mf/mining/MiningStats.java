@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import ricedotwho.mf.config.ModConfig;
 import ricedotwho.mf.data.ApiData;
-import ricedotwho.mf.utils.hyApi;
+import ricedotwho.mf.utils.HyApi;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import static ricedotwho.mf.mf.devInfoMessage;
 
-public class miningStats {
+public class MiningStats {
     private static JsonObject miningCore = null;
     static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -26,7 +26,7 @@ public class miningStats {
 
     private static JsonObject getStats() {
         try {
-            return hyApi.getSelectedProfile(myUUID());
+            return HyApi.getSelectedProfile(myUUID());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

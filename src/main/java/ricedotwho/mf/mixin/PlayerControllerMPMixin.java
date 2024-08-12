@@ -6,7 +6,7 @@ import net.minecraft.util.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import ricedotwho.mf.mining.drillFix;
+import ricedotwho.mf.mining.DrillFix;
 
 @Mixin(PlayerControllerMP.class)
 public class PlayerControllerMPMixin {
@@ -25,6 +25,6 @@ public class PlayerControllerMPMixin {
      */
     @Overwrite
     private boolean isHittingPosition(BlockPos pos) {
-        return drillFix.isHittingPosition(pos, currentItemHittingBlock, currentBlock);
+        return DrillFix.isHittingPosition(pos, currentItemHittingBlock, currentBlock);
     }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class tablistUtils {
+public class TablistUtils {
 
     public static List<String> readTabList() {
        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
@@ -21,7 +21,7 @@ public class tablistUtils {
        List<String> result = new ArrayList<>();
        for(NetworkPlayerInfo info : players) {
            String name = Minecraft.getMinecraft().ingameGUI.getTabList().getPlayerName(info);
-            result.add(stringUtils.stripHypixelCodes(name));
+            result.add(StringUtils.stripHypixelCodes(name));
        }
         if (!result.isEmpty()) {
             return result.subList(0, result.size() - 1);

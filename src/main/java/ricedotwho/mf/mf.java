@@ -13,9 +13,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import ricedotwho.mf.config.ModConfig;
 import ricedotwho.mf.events.OnTimeEvent;
-import ricedotwho.mf.handlers.packetHandler;
-import ricedotwho.mf.mining.miningStats;
-import ricedotwho.mf.mining.pinglessMining;
+import ricedotwho.mf.handlers.SoundHandler;
+import ricedotwho.mf.handlers.PacketHandler;
+import ricedotwho.mf.mining.MiningStats;
+import ricedotwho.mf.mining.PinglessMining;
 import ricedotwho.mf.utils.RiceChatComponent;
 import ricedotwho.mf.utils.Utils;
 
@@ -34,13 +35,14 @@ public class mf {
 		config = new ModConfig();
 		ClientCommandHandler.instance.registerCommand(new mfCommands());
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new pinglessMining());
-		MinecraftForge.EVENT_BUS.register(new ticker());
+		MinecraftForge.EVENT_BUS.register(new PinglessMining());
+		MinecraftForge.EVENT_BUS.register(new Ticker());
+		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 	}
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		ticker.startRunning();
-		miningStats.startRunning();
+		Ticker.startRunning();
+		MiningStats.startRunning();
 	}
 	@SubscribeEvent
 	public void onServerConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
@@ -53,14 +55,13 @@ public class mf {
 		if (mc.getCurrentServerData().serverIP.toLowerCase().contains("hypixel.") || mc.getCurrentServerData().serverIP.toLowerCase().contains("localhost")) {
 
 			// No packets are modified or sent.
-			event.manager.channel().pipeline().addBefore("packet_handler", "mf_packet_handler", new packetHandler());
+			event.manager.channel().pipeline().addBefore("packet_handler", "mf_packet_handler", new PacketHandler());
 			System.out.println("[MF] Successfully added packet handler.");
 		}
 	}
 	@SubscribeEvent
 	public void onSecond(OnTimeEvent.Second event) {
 		Utils.checkLocation();
-		devInfoMessage("second");
 
 		/*
 		if(Utils.inSkyblock != inSkyblock) {
@@ -94,6 +95,10 @@ public class mf {
 	}
 	public static void devInfoMessage(final String message) {
 		if(!ModConfig.devInfo) return;
+		sendMessage(message);
+	}
+	public static void soundsInfoMessage(final String message) {
+		if(!ModConfig.soundsInfo) return;
 		sendMessage(message);
 	}
     static {

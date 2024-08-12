@@ -2,10 +2,10 @@ package ricedotwho.mf.hud;
 
 import cc.polyfrost.oneconfig.hud.SingleTextHud;
 import net.minecraft.util.EnumChatFormatting;
-import ricedotwho.mf.ticker;
+import ricedotwho.mf.Ticker;
 
-public class tpsHud extends SingleTextHud {
-    public tpsHud() {
+public class TpsHud extends SingleTextHud {
+    public TpsHud() {
         super("", false);
         scale = 2;
         background = false;
@@ -16,8 +16,8 @@ public class tpsHud extends SingleTextHud {
     public String getText(boolean example) {
         if(example) return ("tps: " + EnumChatFormatting.GREEN + "20.0");
         EnumChatFormatting color = EnumChatFormatting.GREEN;
-        if(ticker.tps < 18) { color = EnumChatFormatting.YELLOW; }
-        if(ticker.tps < 15) { color = EnumChatFormatting.RED; }
-        return ("tps: " + color + ticker.tps);
+        if(Ticker.tps < 18) { color = EnumChatFormatting.YELLOW; }
+        if(Ticker.tps < 15) { color = EnumChatFormatting.RED; }
+        return ("tps: " + color + Ticker.tps);
     }
 }

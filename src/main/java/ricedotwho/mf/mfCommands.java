@@ -5,9 +5,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
-import ricedotwho.mf.mining.miningStats;
-import ricedotwho.mf.utils.itemUtils;
-import ricedotwho.mf.utils.tablistUtils;
+import ricedotwho.mf.mining.MiningStats;
+import ricedotwho.mf.utils.ItemUtils;
+import ricedotwho.mf.utils.TablistUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +59,7 @@ public class mfCommands extends CommandBase {
 		case 1:
 			if(args[0].equalsIgnoreCase("sbId")) {
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
-				sendMessageWithPrefix("sbID: " + itemUtils.getSkyBlockItemID(heldItem));
+				sendMessageWithPrefix("sbID: " + ItemUtils.getSkyBlockItemID(heldItem));
 			}
 			else {
 				mf.sendMessageUnknown(args[0]);
@@ -73,13 +73,13 @@ public class mfCommands extends CommandBase {
 					if (item == null) return;
 					sendMessage(item.getTooltip(mc.thePlayer, false).toString());
 				} else if (args[1].equalsIgnoreCase("tablist")) {
-					sendMessage(tablistUtils.readTabList().toString());
+					sendMessage(TablistUtils.readTabList().toString());
 				} else if (args[1].equalsIgnoreCase("inv")) {
 					sendMessage(Arrays.toString(mc.thePlayer.inventory.armorInventory));
 				}
 				else if (args[1].equalsIgnoreCase("api")) {
 					sendMessageWithPrefix("Trying to get API");
-					miningStats.getMiningCore();
+					MiningStats.getMiningCore();
 				}
 			} else {
 				mf.sendMessageUnknown(args[0]);

@@ -4,19 +4,19 @@ import net.minecraft.network.play.server.S32PacketConfirmTransaction;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ricedotwho.mf.events.OnTimeEvent;
-import ricedotwho.mf.events.packetEvent;
+import ricedotwho.mf.events.PacketEvent;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ticker {
+public class Ticker {
     static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static double ticksThisSecond = 0;
     public static double tps = 20;
     public static boolean isServerTicking = false;
     @SubscribeEvent
-    public void onServerTick(packetEvent.ReceiveEvent event) {
+    public void onServerTick(PacketEvent.ReceiveEvent event) {
         if(!(event.packet instanceof S32PacketConfirmTransaction)) return;
         ticksThisSecond++;
         if(!isServerTicking && ticksThisSecond > 0) {

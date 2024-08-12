@@ -6,9 +6,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import net.minecraft.network.Packet;
 import net.minecraftforge.common.MinecraftForge;
-import ricedotwho.mf.events.packetEvent;
+import ricedotwho.mf.events.PacketEvent;
 
-public class packetHandler extends ChannelDuplexHandler {
+public class PacketHandler extends ChannelDuplexHandler {
 
     /**
      * Taken from DungeonsRoomsMod under the GNU Affero General Public License v3.0
@@ -17,13 +17,13 @@ public class packetHandler extends ChannelDuplexHandler {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (msg instanceof Packet) MinecraftForge.EVENT_BUS.post(new packetEvent.ReceiveEvent((Packet) msg));
+        if (msg instanceof Packet) MinecraftForge.EVENT_BUS.post(new PacketEvent.ReceiveEvent((Packet) msg));
         super.channelRead(ctx, msg);
     }
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        if (msg instanceof Packet) MinecraftForge.EVENT_BUS.post(new packetEvent.SendEvent((Packet) msg));
+        if (msg instanceof Packet) MinecraftForge.EVENT_BUS.post(new PacketEvent.SendEvent((Packet) msg));
         super.write(ctx, msg, promise);
     }
 }

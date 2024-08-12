@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 import static ricedotwho.mf.mf.devInfoMessage;
 
-public class hyApi {
+public class HyApi {
     static String API_KEY_CONST = ""; // It was expired anyway
     public static String API_KEY = "";
     static String MOJANG_UUID = "https://api.mojang.com/users/profiles/minecraft/";
@@ -35,7 +35,7 @@ public class hyApi {
     }
 
     public boolean getStatus(String name) throws IOException {
-        hyApi idObj = new hyApi();
+        HyApi idObj = new HyApi();
         String uuid = idObj.getUUID(name);
 
         CookieManager cookieManager = new CookieManager();

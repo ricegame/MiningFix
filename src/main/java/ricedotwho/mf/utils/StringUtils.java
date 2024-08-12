@@ -2,7 +2,7 @@ package ricedotwho.mf.utils;
 
 import net.minecraft.util.EnumChatFormatting;
 
-public class stringUtils {
+public class StringUtils {
     public static String stripHypixelCodes(String message) {
         while(message.startsWith(String.valueOf(EnumChatFormatting.RESET))) {
             message = message.substring(2);

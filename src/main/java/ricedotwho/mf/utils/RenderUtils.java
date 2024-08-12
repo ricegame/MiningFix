@@ -8,7 +8,7 @@ import ricedotwho.mf.mixin.AccessorRenderManager;
 
 import static net.minecraft.client.renderer.GlStateManager.translate;
 
-public class renderUtils {
+public class RenderUtils {
     static Minecraft mc;
     static {
         mc = Minecraft.getMinecraft();

@@ -10,23 +10,23 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * @author My-Name-Is-Jeff (lily)
  */
 @Cancelable
-public class packetEvent extends Event {
+public class PacketEvent extends Event {
 
 	public Direction direction;
 	public Packet<?> packet;
 
-	public packetEvent(Packet<?> packet) {
+	public PacketEvent(Packet<?> packet) {
 		this.packet = packet;
 	}
 
-	public static class ReceiveEvent extends packetEvent {
+	public static class ReceiveEvent extends PacketEvent {
 		public ReceiveEvent(Packet<?> packet) {
 			super(packet);
 			this.direction = Direction.INBOUND;
 		}
 	}
 
-	public static class SendEvent extends packetEvent {
+	public static class SendEvent extends PacketEvent {
 		public SendEvent(Packet<?> packet) {
 			super(packet);
 			this.direction = Direction.OUTBOUND;

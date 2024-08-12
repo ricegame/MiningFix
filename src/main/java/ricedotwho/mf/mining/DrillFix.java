@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import ricedotwho.mf.config.ModConfig;
 import ricedotwho.mf.utils.Utils;
-import ricedotwho.mf.utils.itemUtils;
+import ricedotwho.mf.utils.ItemUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * https://github.com/Rekteiru/Hot-Shirtless-Men/blob/main/LICENSE
  * @author Rekteiru
  */
-public class drillFix {
+public class DrillFix {
     static Minecraft mc;
     static List<Item> items = new ArrayList<>();
     static {
@@ -40,7 +40,7 @@ public class drillFix {
         {
             if (ModConfig.drillFix &&
                     itemstack.getItem() == currentItemHittingBlock.getItem() &&
-                    itemUtils.getUUID(itemstack).equals(itemUtils.getUUID(currentItemHittingBlock)) &&
+                    ItemUtils.getUUID(itemstack).equals(ItemUtils.getUUID(currentItemHittingBlock)) &&
                     items.contains(itemstack.getItem())) {
                 return pos.equals(currentBlock);
             }

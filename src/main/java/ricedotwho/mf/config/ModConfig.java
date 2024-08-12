@@ -7,11 +7,17 @@ import cc.polyfrost.oneconfig.config.annotations.Switch;
 import cc.polyfrost.oneconfig.config.annotations.Text;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
-import ricedotwho.mf.hud.titleHud;
-import ricedotwho.mf.hud.tpsHud;
-import ricedotwho.mf.utils.hyApi;
+import ricedotwho.mf.hud.TitleHud;
+import ricedotwho.mf.hud.TpsHud;
+import ricedotwho.mf.utils.HyApi;
 
 public class ModConfig extends Config {
+    @Switch(
+            name = "Mute skill exp gain",
+            description = "Stops the random.orb sound from playing",
+            category = "Sounds"
+    )
+    public static boolean killExpGain = false;
     @Switch(
             name = "Ability Ready Alert",
             description = "Creates a title",
@@ -87,6 +93,12 @@ public class ModConfig extends Config {
             category = "Dev"
     )
     public static boolean devInfo = false;
+    @Switch(
+            name = "Sounds info",
+            description = "Sends additionally info to chat",
+            category = "Dev"
+    )
+    public static boolean soundsInfo = false;
     @Text(
             name = "Custom API Key",
             description = "This does nothing rn",
@@ -101,20 +113,20 @@ public class ModConfig extends Config {
             category = "HUD",
             subcategory = "Title HUD"
     )
-    public titleHud titleHud = new titleHud();
+    public TitleHud titleHud = new TitleHud();
     @HUD(
             name = "TPS HUD",
             category = "HUD",
             subcategory = "TPS HUD"
     )
-    public tpsHud tpsHud = new tpsHud();
+    public TpsHud tpsHud = new TpsHud();
 
     public ModConfig() {
         super(new Mod("Mining Fix", ModType.SKYBLOCK), "mfconfig.json");
         initialize();
 
         // Listeners
-        addListener("customApiKey", hyApi::changeApiKey);
+        addListener("customApiKey", HyApi::changeApiKey);
 
         // Dependencies
         addDependency("fixBreakingProgress","pinglessMining");
