@@ -58,7 +58,7 @@ public class Utils {
 		List<String> scoreboard = ScoreboardHandler.getSidebarLines();
 		for(String s : scoreboard) {
 			String sCleaned = ScoreboardHandler.cleanSB(s);
-			if(Utils.strContainsOneOf(sCleaned, "Crystal Nucleus", "Dragon's Lair", "Fairy Grotto", "Goblin Holdout", "Goblin Queen's Den", "Jungle Temple", "Jungle", "Khazad-dûm", "Lost Precursor City", "Magma Fields", "Mines of Divan", "Mithril Deposits", "Precursor Remnants")){
+			if(Utils.strContainsOneOf(sCleaned, "Crystal Nucleus", "Dragon's Lair", "Fairy Grotto", "Goblin Holdout", "Goblin Queen's Den", "Jungle Temple", "Jungle", "Khazad-dû\uD83D\uDC7Em", "Lost Precursor City", "Magma Fields", "Mines of Divan", "Mithril Deposits", "Precursor Remnants")){
 				inHollows = true;
 				return;
 			}

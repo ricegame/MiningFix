@@ -6,7 +6,7 @@ import ricedotwho.mf.Ticker;
 
 public class TpsHud extends SingleTextHud {
     public TpsHud() {
-        super("", false);
+        super("tps", false);
         scale = 2;
         background = false;
         positionAlignment = 2;
@@ -14,10 +14,10 @@ public class TpsHud extends SingleTextHud {
     }
     @Override
     public String getText(boolean example) {
-        if(example) return ("tps: " + EnumChatFormatting.GREEN + "20.0");
+        if(example) return (EnumChatFormatting.GREEN + "20.0");
         EnumChatFormatting color = EnumChatFormatting.GREEN;
         if(Ticker.tps < 18) { color = EnumChatFormatting.YELLOW; }
         if(Ticker.tps < 15) { color = EnumChatFormatting.RED; }
-        return ("tps: " + color + Ticker.tps);
+        return (color.toString() + Ticker.tps);
     }
 }

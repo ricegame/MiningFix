@@ -12,7 +12,8 @@ import static ricedotwho.mf.mf.soundsInfoMessage;
 public class SoundHandler {
     @SubscribeEvent
     public void onSound(PlaySoundEvent event) {
-        soundsInfoMessage("Sound: " + event.name + " Pitch: " + event.result.getPitch() + " Volume: " + event.result.getVolume());
+        if(event.result == null) return;
+        soundsInfoMessage("Sound: " + event.name + " Pitch: " + event.sound.getPitch() + " Volume: " + event.sound.getVolume());
         if(!ModConfig.killExpGain) return;
         if(!Utils.inSkyblock) return;
         if(Objects.equals(event.name, "random.orb")) {

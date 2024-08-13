@@ -5,10 +5,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S32PacketConfirmTransaction;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,12 +19,11 @@ import ricedotwho.mf.events.BlockChangedEvent;
 import ricedotwho.mf.events.OnTimeEvent;
 import ricedotwho.mf.events.PacketEvent;
 import ricedotwho.mf.hud.TitleClass;
-import ricedotwho.mf.utils.Utils;
 import ricedotwho.mf.utils.TablistUtils;
+import ricedotwho.mf.utils.Utils;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,36 +49,36 @@ public class PinglessMining {
         msPattern = Pattern.compile(miningSpeed);
     }
     public static BlockPos currentBlock = null;
-    private static BlockPos lastBlock = null;
     public static int currentProgress = 0;
     private Integer tablistMiningSpeed = 0;
     private Integer currentTicks = 0;
     private Integer ticksNeeded = 0;
+    private Integer ticksThisSecond = 0;
     private boolean miningSpeedBoost = false;
     boolean playingSound = false;
-    private Random rand = new Random();
+    private boolean dontUpdateTablist = false;
+    // todo: fix -> For some reason we are missing ticks, like blocks take 3-5 ticks longer than they should to break!
+    // good enough for a patch now tho
+
     @SubscribeEvent
     public void onServerTick(PacketEvent.ReceiveEvent event) {
         if(event.packet instanceof S32PacketConfirmTransaction) {
             if(!ModConfig.pinglessMining || !(Utils.inMines || Utils.inHollows)) return;
+            ticksThisSecond++;
+
             BlockPos oldBlock = currentBlock;
             currentBlock = Utils.lookingAt();
             if(!Objects.equals(currentBlock, oldBlock)) blockChanged();
 
-            if(!Mouse.isButtonDown(0)) {
-                currentTicks = 0;
-            }
-            if(mc.currentScreen != null) {
+            if(!should()) return;
+            calcTicksNeeded();
+            if(!Mouse.isButtonDown(0) || mc.currentScreen != null) {
                 currentTicks = 0;
                 return;
             }
 
-            if(!should()) return;
-            calcTicksNeeded();
-
             if(currentTicks >= ticksNeeded) {
-                ticksNeeded = 0;
-                lastBlock = currentBlock;
+                currentTicks = 0;
 
                 if(Utils.inHollows) {
                     mc.theWorld.setBlockToAir(currentBlock);
@@ -87,21 +86,24 @@ public class PinglessMining {
                     mc.theWorld.setBlockState(currentBlock, Blocks.bedrock.getStateFromMeta(0));
                 }
             }
-
+            if(ticksThisSecond >= 20) return;
             currentTicks++;
         }
-        else if (event.packet instanceof S02PacketChat) {
-            String message = EnumChatFormatting.getTextWithoutFormattingCodes(((S02PacketChat) event.packet).getChatComponent().getUnformattedText());
-            Matcher activate = activatePattern.matcher(message);
-            Matcher deactivate = expirePattern.matcher(message);
-            Matcher ready = readyPattern.matcher(message);
-            if(activate.find()) { if(Objects.equals(activate.group(1), "Mining Speed Boost")){ miningSpeedBoost = true; }}
-            if(deactivate.find()) { if(Objects.equals(deactivate.group(1), "Mining Speed Boost")){ Utils.executeWithDelay(() -> miningSpeedBoost = false, 5, TimeUnit.SECONDS); }} // tablist takes so long to update :sob:
-
-            if(ready.find() && ModConfig.miningAbilityAlert) {
-                TitleClass.createTitle(EnumChatFormatting.GOLD + ready.group(1), 3000);
-                mc.thePlayer.playSound("note.pling",1f,1f);
-            }
+    }
+    @SubscribeEvent
+    public void onChat(ClientChatReceivedEvent event) {
+        String message = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
+        Matcher activate = activatePattern.matcher(message);
+        Matcher deactivate = expirePattern.matcher(message);
+        Matcher ready = readyPattern.matcher(message);
+        if(activate.find()) { if(Objects.equals(activate.group(1), "Mining Speed Boost")){ miningSpeedBoost = true; dontUpdateTablist = true; }}
+        if(deactivate.find()) { if(Objects.equals(deactivate.group(1), "Mining Speed Boost")){
+            miningSpeedBoost = false;
+            Utils.executeWithDelay(() -> dontUpdateTablist = false, 3, TimeUnit.SECONDS);
+        }}
+        if(ready.find() && ModConfig.miningAbilityAlert) {
+            TitleClass.createTitle(EnumChatFormatting.GOLD + ready.group(1), 3000);
+            mc.thePlayer.playSound("note.pling",1f,1f);
         }
     }
     private void blockChanged() {
@@ -116,17 +118,34 @@ public class PinglessMining {
         int hardness = MiningData.MINING_HARDNESS.get((blockId == 160 ? 95 : blockId) + ":" + blockMeta); // panes are a pain
         int raw_ticks = getRawTicks(hardness);
 
-        ticksNeeded = Math.max((raw_ticks <= 4 && raw_ticks > 1 ? 4 : raw_ticks), 2); // Prevent 0 and 1 ticks, 1 ticks make ghostblocks and is inconsistent
+        ticksNeeded = Math.max((raw_ticks <= 4 && raw_ticks > 1 ? (4 + ModConfig.extraTicks) : raw_ticks), 2); // Prevent 0 and 1 ticks, 1 ticks make ghostblocks and is inconsistent
     }
     //todo: bluew cheese support
     private int getRawTicks(int hardness) {
-        ApiData apiData = MiningStats.getApiData();
-        int ms = tablistMiningSpeed + (isGemstone() ? apiData.professional : 0);
-        int halfBakedSpeed = miningSpeedBoost ? (ms * (1 + apiData.msBoost /* + blueCheese */)) : ms;
-        int miningSpeed = (mc.thePlayer.onGround || !mc.thePlayer.isInWater()) ? halfBakedSpeed : halfBakedSpeed / 5;
-        int ticks = Math.round((float) (30 * hardness) / miningSpeed) + ModConfig.extraTicks;
-        devInfoMessage("Mining Speed: " + miningSpeed + " Ticks: " + ticks);
+        int ms = getMiningSpeed();
+        int ticks = Math.round((float) (30 * hardness) / ms) + ModConfig.extraTicks;
+        devInfoMessage("Mining Speed: " + ms + " Ticks: " + ticks);
         return ticks;
+    }
+    // Mining speed boost with bal gave an incorrect mining speed :sob:
+    // now we are removing the bal buff then reapplying after mining speed boost
+    private int getMiningSpeed() {
+        ApiData apiData = MiningStats.getApiData();
+        int ms = tablistMiningSpeed;
+        boolean bal = apiData.pet != null && apiData.pet.get("type").getAsString().equals("BAL");
+        boolean mf = mc.thePlayer.posY <= 61;
+        if(bal && miningSpeedBoost && mf) {
+            ms = (int) Math.floor(ms / (1 +apiData.bal_buff));
+        }
+        ms += isGemstone() ? apiData.professional : 0;
+        int halfBakedSpeed = miningSpeedBoost ? (ms * (1 + apiData.msBoost + (apiData.potm > 0 ? 1 : 0))) : ms;
+        int miningSpeed = bal && miningSpeedBoost && mf ? (int) Math.floor(halfBakedSpeed * (1 + apiData.bal_buff)) : halfBakedSpeed;
+
+        int finalSpeed = miningSpeed;
+        if(!mc.thePlayer.onGround) { finalSpeed = miningSpeed / 5; }
+        if(mc.thePlayer.isInWater()) { finalSpeed = miningSpeed / 5; }
+
+        return finalSpeed;
     }
 
     public static boolean should() {
@@ -150,11 +169,14 @@ public class PinglessMining {
         if(!ModConfig.fixBreakingProgress || !ModConfig.pinglessMining || !Utils.inHollows) return;
         if(currentTicks != 0 && ticksNeeded != 0) {
             currentProgress = (int) Math.floor(((float) currentTicks / ticksNeeded) * 9);
-        } else { currentProgress = 9; }
+        } else {currentProgress = 0; }
+        devInfoMessage("currentTicks: " + currentTicks + " ticksNeeded: " + ticksNeeded + " currentProgress: " + currentProgress);
     }
     @SubscribeEvent
     public void onSecond(OnTimeEvent.Second event) {
-        if(!ModConfig.pinglessMining || miningSpeedBoost || !(Utils.inMines || Utils.inHollows)) return;
+        if(!ModConfig.pinglessMining || !(Utils.inMines || Utils.inHollows)) return;
+        ticksThisSecond = 0;
+        if(dontUpdateTablist) return;
 
         if(mc.theWorld == null) return;
         List<String> tabLines = TablistUtils.readTabList();
@@ -163,9 +185,10 @@ public class PinglessMining {
             Matcher matcher = msPattern.matcher(cleaned);
             if(matcher.find()) {
                 tablistMiningSpeed = Integer.parseInt(matcher.group(1));
-                devInfoMessage("Tablist speed: " + tablistMiningSpeed);
+                //devInfoMessage("Tablist speed: " + tablistMiningSpeed);
             }
         }
+        devInfoMessage("Tablist speed: " + tablistMiningSpeed);
         if(tablistMiningSpeed == 0) { sendMessageWithPrefix(EnumChatFormatting.RED + "Enable mining speed widget or MF wont work! (/widget -> Stats Widget -> Shown Stats -> Mining Speed)"); }
     }
     //todo: figure out how to make this work with the new sound playing code

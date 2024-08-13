@@ -66,7 +66,7 @@ public class ModConfig extends Config {
             category = "Mining",
             subcategory = "Pingless"
     )
-    public static int extraTicks = 1;
+    public static int extraTicks = 0;
     @Slider(
             name = "Api request interval (Minutes)",
             description = "Time to wait between api requests. Run \"/mf dev api\" to manually fetch",

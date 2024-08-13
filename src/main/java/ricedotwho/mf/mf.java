@@ -85,9 +85,9 @@ public class mf {
 		if(mc.thePlayer == null) return;
         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(PREFIX.getUnformattedText() + message));
     }
-    public static void sendMessageUnknown(final String message) {
+    public static void sendMessageUnknown(final String args) {
 		if(mc.thePlayer == null) return;
-    	mc.thePlayer.addChatMessage(new RiceChatComponent(PREFIX.getUnformattedTextForChat() + EnumChatFormatting.RED + "Unknown Setting (Args: " + message + ")"));
+    	mc.thePlayer.addChatMessage(new RiceChatComponent(PREFIX.getUnformattedTextForChat() + EnumChatFormatting.RED + "Unknown Setting (Args: " + args + ")"));
     }
 	public static void devMessage(final String message) {
 		if(!ModConfig.devOverride) return;

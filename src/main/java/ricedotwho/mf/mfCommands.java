@@ -36,8 +36,8 @@ public class mfCommands extends CommandBase {
 	}
 	
 	@Override
-	public List getCommandAliases() {
-		List<String> commandAliases = new ArrayList();
+	public List<String> getCommandAliases() {
+		List<String> commandAliases = new ArrayList<>();
 		commandAliases.add("miningfix");
 		return commandAliases;
 	}
