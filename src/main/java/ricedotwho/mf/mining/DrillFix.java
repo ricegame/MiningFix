@@ -37,7 +37,7 @@ public class DrillFix {
 
         if (currentItemHittingBlock != null && itemstack != null)
         {
-            if (ModConfig.drillFix && Utils.inSkyblock
+            if (ModConfig.drillFix && Utils.inSkyblock &&
                     itemstack.getItem() == currentItemHittingBlock.getItem() &&
                     ItemUtils.getUUID(itemstack).equals(ItemUtils.getUUID(currentItemHittingBlock)) &&
                     items.contains(itemstack.getItem())) {

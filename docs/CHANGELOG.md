@@ -21,7 +21,6 @@
 (v1.1.2) — Bugfix (14/08/2024):
 READ: THE MOD WILL NOT WORK UNTIL THE SERVER STARTS TICKING!!!
 This means the pingless mining WILL NOT WORK until the tps display says the tps is >0!
-Mining speed boost is known to get the wrong speed, will be fixed soon!
 - Attempting to fix block breaking inconsistency
 - Fixed mining speed boost
 - Fixed jumping and in water checks
@@ -29,4 +28,5 @@ Mining speed boost is known to get the wrong speed, will be fixed soon!
 - Fixed Khazad-dûm not being detected as the Crystal Hollows due to weird formatting in scoreboard
 - Fixed the mod sometimes counting over 20 ticks per second, causing breaking to fail
 - Other misc renames
+- Made mining speed more accurate, still not 100% sure how it works on hypixels end.
 

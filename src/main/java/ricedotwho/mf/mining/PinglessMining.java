@@ -127,11 +127,13 @@ public class PinglessMining {
         devInfoMessage("Mining Speed: " + ms + " Ticks: " + ticks);
         return ticks;
     }
-    // Mining speed boost with bal gave an incorrect mining speed :sob:
-    // now we are removing the bal buff then reapplying after mining speed boost
     private int getMiningSpeed() {
         ApiData apiData = MiningStats.getApiData();
         int ms = tablistMiningSpeed;
+        int miningSpeed = miningSpeedBoost ? (ms * (2 + apiData.msBoost + (apiData.potm > 0 ? 1 : 0))) : ms;
+        miningSpeed += (isGemstone() ? apiData.professional : 0);
+
+        /* ok maybe im just really stupid
         boolean bal = apiData.pet != null && apiData.pet.get("type").getAsString().equals("BAL");
         boolean mf = mc.thePlayer.posY <= 61;
         if(bal && miningSpeedBoost && mf) {
@@ -140,6 +142,7 @@ public class PinglessMining {
         ms += isGemstone() ? apiData.professional : 0;
         int halfBakedSpeed = miningSpeedBoost ? (ms * (1 + apiData.msBoost + (apiData.potm > 0 ? 1 : 0))) : ms;
         int miningSpeed = bal && miningSpeedBoost && mf ? (int) Math.floor(halfBakedSpeed * (1 + apiData.bal_buff)) : halfBakedSpeed;
+        */
 
         int finalSpeed = miningSpeed;
         if(!mc.thePlayer.onGround) { finalSpeed = miningSpeed / 5; }
