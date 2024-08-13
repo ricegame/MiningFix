@@ -5,8 +5,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import ricedotwho.mf.config.ModConfig;
-import ricedotwho.mf.utils.Utils;
 import ricedotwho.mf.utils.ItemUtils;
+import ricedotwho.mf.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

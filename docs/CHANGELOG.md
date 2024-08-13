@@ -22,7 +22,6 @@
 READ: THE MOD WILL NOT WORK UNTIL THE SERVER STARTS TICKING!!!
 This means the pingless mining WILL NOT WORK until the tps display says the tps is >0!
 - Attempting to fix block breaking inconsistency
-- Fixed mining speed boost
 - Fixed jumping and in water checks
 - Improved TPS display
 - Fixed Khazad-dûm not being detected as the Crystal Hollows due to weird formatting in scoreboard
