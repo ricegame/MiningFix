@@ -32,13 +32,12 @@ public class DrillFix {
     }
     public static boolean isHittingPosition(BlockPos pos, ItemStack currentItemHittingBlock, BlockPos currentBlock)
     {
-        if(!Utils.inSkyblock) { return false; }
         ItemStack itemstack = mc.thePlayer.getHeldItem();
         boolean flag = currentItemHittingBlock == null && itemstack == null;
 
         if (currentItemHittingBlock != null && itemstack != null)
         {
-            if (ModConfig.drillFix &&
+            if (ModConfig.drillFix && Utils.inSkyblock
                     itemstack.getItem() == currentItemHittingBlock.getItem() &&
                     ItemUtils.getUUID(itemstack).equals(ItemUtils.getUUID(currentItemHittingBlock)) &&
                     items.contains(itemstack.getItem())) {
