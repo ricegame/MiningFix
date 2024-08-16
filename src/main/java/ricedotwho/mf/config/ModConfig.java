@@ -1,23 +1,33 @@
 package ricedotwho.mf.config;
 
 import cc.polyfrost.oneconfig.config.Config;
-import cc.polyfrost.oneconfig.config.annotations.HUD;
-import cc.polyfrost.oneconfig.config.annotations.Slider;
-import cc.polyfrost.oneconfig.config.annotations.Switch;
-import cc.polyfrost.oneconfig.config.annotations.Text;
+import cc.polyfrost.oneconfig.config.annotations.*;
+import cc.polyfrost.oneconfig.config.data.InfoType;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
+import cc.polyfrost.oneconfig.config.data.OptionSize;
+import ricedotwho.mf.Reference;
+import ricedotwho.mf.hud.DevHud;
 import ricedotwho.mf.hud.TitleHud;
 import ricedotwho.mf.hud.TpsHud;
 import ricedotwho.mf.utils.HyApi;
 
 public class ModConfig extends Config {
-    @Switch(
-            name = "Mute skill exp gain",
-            description = "Stops the random.orb sound from playing",
-            category = "Sounds"
+    @Header(
+            text = "MiningFix v" + Reference.VERSION + " by rice.who",
+            size = OptionSize.DUAL,
+            category = "Mining",
+            subcategory = "Info"
     )
-    public static boolean killExpGain = false;
+    public static boolean ignored;
+    @Info(
+            text = "This mod COULD be bannable! Use at your own risk!",
+            type = InfoType.WARNING,
+            size = OptionSize.DUAL,
+            category = "Mining",
+            subcategory = "Info"
+    )
+    public static boolean ignored1;
     @Switch(
             name = "Ability Ready Alert",
             description = "Creates a title",
@@ -59,14 +69,13 @@ public class ModConfig extends Config {
             subcategory = "Pingless"
     )
     public static boolean pinglessSound = true;
-    @Slider(
-            name = "Extra Ticks",
-            description = "Increase this if the mod is failing a lot",
-            min = 0, max = 10,
+    @Switch(
+            name = "Ticking message",
+            description = "Sends a message to chat when the server starts ticking",
             category = "Mining",
             subcategory = "Pingless"
     )
-    public static int extraTicks = 0;
+    public static boolean tickingMessage = false;
     @Slider(
             name = "Api request interval (Minutes)",
             description = "Time to wait between api requests. Run \"/mf dev api\" to manually fetch",
@@ -75,6 +84,35 @@ public class ModConfig extends Config {
             subcategory = "Pingless"
     )
     public static float apiInterval = 5f;
+    @Slider(
+            name = "Extra Ticks",
+            description = "Increase this if the mod is failing a lot\nIf you're not sure what to put this at leave it at 1",
+            min = 0, max = 10,
+            category = "Mining",
+            subcategory = "Pingless"
+    )
+    public static int extraTicks = 1;
+    @Switch(
+            name = "Mute skill exp gain",
+            description = "Stops the random.orb sound from playing",
+            category = "Sounds"
+    )
+    public static boolean killExpGain = false;
+    @Dropdown(
+            name = "Custom Gemstone sounds",
+            description = "Select from some custom gem sounds (NYI)",
+            options = {"Vanilla","Amethyst"},
+            category = "Sounds"
+    )
+    public static int gemstoneSound = 0;
+    @Info(
+            text = "These are DEV options, dont change these unless you know what you are doing!",
+            type = InfoType.ERROR,
+            size = OptionSize.DUAL,
+            category = "Dev",
+            subcategory = "Info"
+    )
+    public static boolean ignored2;
     @Switch(
             name = "Dev override",
             description = "developer purploses",
@@ -106,6 +144,22 @@ public class ModConfig extends Config {
             category = "Dev"
     )
     public static String customApiKey = "";
+    @Slider(
+            name = "Max Server tps",
+            description = ("Max tps which the mod will accept. Default: 20\n§4Don't change this if you dont know what your doing"),
+            step = 1,
+            min = 1, max = 25,
+            category = "Dev"
+    )
+    public static int maxServerTick = 20;
+    @Slider(
+            name = "Max ping delay",
+            description = ("Max delay since last ping mod will accept. Default: 25\n§4Don't change this if you dont know what your doing"),
+            step = 1,
+            min = 1, max = 50,
+            category = "Dev"
+    )
+    public static int pingDelay = 25;
 
     // yapology
     @HUD(
@@ -120,6 +174,15 @@ public class ModConfig extends Config {
             subcategory = "TPS HUD"
     )
     public TpsHud tpsHud = new TpsHud();
+    @HUD(
+            name = "Dev HUD",
+            category = "HUD",
+            subcategory = "Dev HUD"
+    )
+    public DevHud devHud = new DevHud();
+
+    // other
+    public static boolean onboarding = false;
 
     public ModConfig() {
         super(new Mod("Mining Fix", ModType.SKYBLOCK), "mfconfig.json");
@@ -138,5 +201,6 @@ public class ModConfig extends Config {
         addDependency("miningSpeedBoost","pinglessMining");
         addDependency("apiInterval","pinglessMining");
         addDependency("allowHardstone","pinglessMining");
+        addDependency("tickingMessage","pinglessMining");
     }
 }

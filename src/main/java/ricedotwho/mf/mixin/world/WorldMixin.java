@@ -22,6 +22,7 @@ public abstract class WorldMixin {
     private void onSetBlockState(BlockPos pos, IBlockState state, int flags, CallbackInfoReturnable<Boolean> cir) {
         if(!isValid(pos)) return;
         IBlockState oldState = getBlockState(pos);
+        if(pos == null || state == null || oldState == null) return;
         BlockChangedEvent.postAndCatch(oldState, state, pos);
     }
 }

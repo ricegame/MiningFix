@@ -1,8 +1,11 @@
 package ricedotwho.mf;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -10,11 +13,9 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import ricedotwho.mf.config.ModConfig;
 import ricedotwho.mf.events.OnTimeEvent;
 import ricedotwho.mf.handlers.SoundHandler;
-import ricedotwho.mf.handlers.PacketHandler;
 import ricedotwho.mf.mining.MiningStats;
 import ricedotwho.mf.mining.PinglessMining;
 import ricedotwho.mf.utils.RiceChatComponent;
@@ -27,7 +28,6 @@ public class mf {
 
 	public static ModConfig config;
 	public static final Minecraft mc;
-	private boolean inSkyblock = false;
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -38,6 +38,7 @@ public class mf {
 		MinecraftForge.EVENT_BUS.register(new PinglessMining());
 		MinecraftForge.EVENT_BUS.register(new Ticker());
 		MinecraftForge.EVENT_BUS.register(new SoundHandler());
+		MinecraftForge.EVENT_BUS.register(new Onboarding());
 	}
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
@@ -45,33 +46,8 @@ public class mf {
 		MiningStats.startRunning();
 	}
 	@SubscribeEvent
-	public void onServerConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		/**
-		 * Taken from DungeonsRoomsMod under the GNU Affero General Public License v3.0
-		 * https://github.com/Quantizr/DungeonRoomsMod/blob/1f4c4e009684712d1b57b992fdbef68805deb2e6/LICENSE
-		 * @author Quantizr
-		 */
-		if (mc.getCurrentServerData() == null) return;
-		if (mc.getCurrentServerData().serverIP.toLowerCase().contains("hypixel.") || mc.getCurrentServerData().serverIP.toLowerCase().contains("localhost")) {
-
-			// No packets are modified or sent.
-			event.manager.channel().pipeline().addBefore("packet_handler", "mf_packet_handler", new PacketHandler());
-			System.out.println("[MF] Successfully added packet handler.");
-		}
-	}
-	@SubscribeEvent
 	public void onSecond(OnTimeEvent.Second event) {
 		Utils.checkLocation();
-
-		/*
-		if(Utils.inSkyblock != inSkyblock) {
-			if(Utils.inSkyblock) {
-				SkyblockEvent.Joined.postAndCatch();
-			} else {
-				SkyblockEvent.Left.postAndCatch();
-			}
-		}
-		 */
 	}
     public static void sendMessage(final String message) {
 		if(mc.thePlayer == null) return;
@@ -104,4 +80,11 @@ public class mf {
     static {
     	mc = Minecraft.getMinecraft();
     }
+	public static ISound empty = new PositionedSound(new ResourceLocation("mfutils", "empty")) {{
+		volume = 1f;
+		pitch = 1f;
+		repeat = false;
+		repeatDelay = 0;
+		attenuationType = AttenuationType.NONE;
+	}};
 }

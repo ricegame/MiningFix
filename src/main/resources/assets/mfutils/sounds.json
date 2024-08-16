@@ -1,0 +1,10 @@
+{
+  "empty": {
+    "category": "neutral",
+    "sounds": [
+      "mfutils:empty"
+    ],
+    "stream": "false",
+    "attenuation_distance":"NONE"
+  }
+}

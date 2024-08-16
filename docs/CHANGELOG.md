@@ -4,8 +4,8 @@
  - Ability Alert
 
 (v1.0.1)  — Bugfix (11/08/2024):
-- Updated README.md
-- Updated ModConfig
+ - Updated README.md
+ - Updated ModConfig
 
 (v1.1.0) — Api Update (12/08/2024):
  - Switched to using api for gemstone mining speed
@@ -21,11 +21,18 @@
 (v1.1.2) — Bugfix (14/08/2024):
 READ: THE MOD WILL NOT WORK UNTIL THE SERVER STARTS TICKING!!!
 This means the pingless mining WILL NOT WORK until the tps display says the tps is >0!
-- Attempting to fix block breaking inconsistency
-- Fixed jumping and in water checks
-- Improved TPS display
-- Fixed Khazad-dûm not being detected as the Crystal Hollows due to weird formatting in scoreboard
-- Fixed the mod sometimes counting over 20 ticks per second, causing breaking to fail
-- Other misc renames
-- Made mining speed more accurate, still not 100% sure how it works on hypixels end.
+ - Attempting to fix block breaking inconsistency
+ - Fixed jumping and in water checks
+ - Improved TPS display
+ - Fixed Khazad-dûm not being detected as the Crystal Hollows due to weird formatting in scoreboard
+ - Fixed the mod sometimes counting over 20 ticks per second, causing breaking to fail
+ - Other misc renames
+ - Made mining speed more accurate, still not 100% sure how it works on hypixels end.
+
+(v1.1.3) — Bugfix (??/08/2024):
+ - Fixed a crash with Pingless Sounds
+ - Onboarding
+
+
+todo: make mod more consistent
 
