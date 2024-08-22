@@ -86,12 +86,12 @@ public class ModConfig extends Config {
     public static float apiInterval = 5f;
     @Slider(
             name = "Extra Ticks",
-            description = "Increase this if the mod is failing a lot\nIf you're not sure what to put this at leave it at 1",
+            description = "Increase this if the mod is failing a lot\nIf you're not sure what to put this at leave it at 0",
             min = 0, max = 10,
             category = "Mining",
             subcategory = "Pingless"
     )
-    public static int extraTicks = 1;
+    public static int extraTicks = 0;
     @Switch(
             name = "Mute skill exp gain",
             description = "Stops the random.orb sound from playing",
@@ -153,13 +153,13 @@ public class ModConfig extends Config {
     )
     public static int maxServerTick = 20;
     @Slider(
-            name = "Max ping delay",
-            description = ("Max delay since last ping mod will accept. Default: 25\n§4Don't change this if you dont know what your doing"),
+            name = "Min ping delay",
+            description = ("Min delay since last ping mod will accept. Default: 30\n§4Don't change this if you dont know what your doing"),
             step = 1,
             min = 1, max = 50,
             category = "Dev"
     )
-    public static int pingDelay = 25;
+    public static int pingDelay = 30;
 
     // yapology
     @HUD(

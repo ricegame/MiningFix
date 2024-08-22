@@ -6,5 +6,29 @@
     ],
     "stream": "false",
     "attenuation_distance":"NONE"
+  },
+  "amethyst1": {
+    "category": "neutral",
+    "sounds": [
+      "mfutils:amethyst1"
+    ],
+    "stream": "false",
+    "attenuation_distance":"NONE"
+  },
+  "amethyst2": {
+    "category": "neutral",
+    "sounds": [
+      "mfutils:amethyst2"
+    ],
+    "stream": "false",
+    "attenuation_distance":"NONE"
+  },
+  "amethyst3": {
+    "category": "neutral",
+    "sounds": [
+      "mfutils:amethyst3"
+    ],
+    "stream": "false",
+    "attenuation_distance":"NONE"
   }
 }

@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static ricedotwho.mf.handlers.SoundHandler.playGemstoneSound;
 import static ricedotwho.mf.mf.devInfoMessage;
 import static ricedotwho.mf.mf.sendMessageWithPrefix;
 
@@ -62,6 +63,7 @@ public class PinglessMining {
     public static long timeSaved = 0;
     private long timeSinceLastTick = 0;
     public static long pingDelay = 0;
+    private int stopSound = 0;
     // todo: fix -> For some reason we are missing ticks, like blocks take 3-5 ticks longer than they should to break!
     // good enough for a patch now tho
 
@@ -74,11 +76,14 @@ public class PinglessMining {
         else if(event.packet instanceof S29PacketSoundEffect) {
             if(!ModConfig.pinglessSound || !ModConfig.pinglessMining || !ModConfig.fixBreakingProgress) return;
             if(!(Utils.inMines || Utils.inHollows)) return;
+
+            if(stopSound > 2) return;
             
             String name = ((S29PacketSoundEffect) event.packet).getSoundName();
             if(Objects.equals(name, "dig.glass")/* || Objects.equals(name, "random.orb")*/) {
                 timeSaved = System.currentTimeMillis() - timeOfBreak;
                 event.setCanceled(true);
+                stopSound++;
             }
         }
     }
@@ -213,9 +218,12 @@ public class PinglessMining {
         if(!Utils.isWithinRadius(event.getPos(), mc.thePlayer.getPosition(), 16)) return;
         if(Utils.equalsOneOf(event.getOldState().getBlock(), Blocks.stained_glass,Blocks.stained_glass_pane) && event.getNewState().getBlock().equals(Blocks.air)) {
             if(currentBlock == null) return;
-            mc.theWorld.playSoundAtPos(currentBlock, "dig.glass", 1f, 0f, false);
-            mc.theWorld.playSoundAtPos(currentBlock, "dig.glass", 1f, 0.7936508059501648f, false);
-            //mc.theWorld.playSoundAtPos(currentBlock, "random.orb", 0.5f, /*(1.403f + (rand.nextFloat() * 1.264f)) */ 2f, false);
+            playGemstoneSound(currentBlock, 1f, 0f, false);
+            playGemstoneSound(currentBlock, 1f, 0.7936508059501648f, false);
+            //mc.theWorld.playSoundAtPos(currentBlock, "dig.glass", 1f, 0f, false);
+            //mc.theWorld.playSoundAtPos(currentBlock, "dig.glass", 1f, 0.7936508059501648f, false);
+            if(!ModConfig.killExpGain) mc.theWorld.playSoundAtPos(currentBlock, "random.orb", 0.5f, /*(1.403f + (rand.nextFloat() * 1.264f)) */ 2f, false);
+            stopSound = 0;
         }
     }
 }
