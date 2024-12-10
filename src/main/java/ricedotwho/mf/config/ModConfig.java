@@ -35,6 +35,12 @@ public class ModConfig extends Config {
     )
     public static boolean miningAbilityAlert = false;
     @Switch(
+            name = "Don't Break Cobblestone",
+            description = "Stops breaking cobblestone in the ch",
+            category = "Mining"
+    )
+    public static boolean dontBreakCobblestone = false;
+    @Switch(
             name = "Drill Fix",
             description = "Fixes the mining progress reset",
             category = "Mining",

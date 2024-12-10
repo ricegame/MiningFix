@@ -25,10 +25,7 @@ public class MiningStats {
     private static JsonObject pets_data = null;
     static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    static Minecraft mc;
-    static {
-        mc = Minecraft.getMinecraft();
-    }
+    static Minecraft mc = Minecraft.getMinecraft();
 
     private static JsonObject getStats() {
         try {

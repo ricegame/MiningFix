@@ -61,6 +61,14 @@ public class MiningData {
 
         MINING_HARDNESS.put("82:0", 5_600); // Clay
         MINING_HARDNESS.put("4:0", 5_600); // Cobblestone
+
+        // Glacite Gemstones
+
+        MINING_HARDNESS.put("95:15", 5_200); // Onyx
+        MINING_HARDNESS.put("95:11", 5_200); // Aquamarine
+        MINING_HARDNESS.put("95:12", 5_200); // Citrine
+        MINING_HARDNESS.put("95:13", 5_200); // Peridot
+
     }
     public static final Map<String, Map<String, Integer>> ITEM_MS = new HashMap<>();
 

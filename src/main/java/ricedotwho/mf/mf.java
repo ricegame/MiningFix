@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ricedotwho.mf.config.ModConfig;
 import ricedotwho.mf.events.OnTimeEvent;
 import ricedotwho.mf.handlers.SoundHandler;
+import ricedotwho.mf.mining.DontBreakCobble;
 import ricedotwho.mf.mining.MiningStats;
 import ricedotwho.mf.mining.PinglessMining;
 import ricedotwho.mf.utils.RiceChatComponent;
@@ -39,6 +40,7 @@ public class mf {
 		MinecraftForge.EVENT_BUS.register(new Ticker());
 		MinecraftForge.EVENT_BUS.register(new SoundHandler());
 		MinecraftForge.EVENT_BUS.register(new Onboarding());
+		MinecraftForge.EVENT_BUS.register(new DontBreakCobble());
 	}
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {

@@ -64,13 +64,10 @@ public class PinglessMining {
     private long timeSinceLastTick = 0;
     public static long pingDelay = 0;
     private int stopSound = 0;
-    // todo: fix -> For some reason we are missing ticks, like blocks take 3-5 ticks longer than they should to break!
-    // good enough for a patch now tho
 
     @SubscribeEvent
     public void onPacket(PacketEvents.PacketReceivedEvent event) {
         if(event.packet instanceof S32PacketConfirmTransaction) {
-            System.out.println(event.getPacket());
             onServerTick();
         }
         else if(event.packet instanceof S29PacketSoundEffect) {
@@ -112,7 +109,9 @@ public class PinglessMining {
                 if(Utils.inHollows) {
                     mc.theWorld.setBlockToAir(currentBlock);
                 } else {
-                    mc.theWorld.setBlockState(currentBlock, Blocks.bedrock.getStateFromMeta(0));
+                    if(isGemstone()) {
+                        mc.theWorld.setBlockToAir(currentBlock);
+                    } else { mc.theWorld.setBlockState(currentBlock, Blocks.bedrock.getStateFromMeta(0)); }
                 }
             }
             if(ticksThisSecond > ModConfig.maxServerTick) return; // 19 dollar fornite car
@@ -185,7 +184,7 @@ public class PinglessMining {
     }
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
-        if(!ModConfig.fixBreakingProgress || !ModConfig.pinglessMining || !Utils.inHollows) return;
+        if(!ModConfig.fixBreakingProgress || !ModConfig.pinglessMining || !(Utils.inMines || Utils.inHollows)) return;
         if(currentTicks != 0 && ticksNeeded != 0) {
             currentProgress = (int) Math.floor(((float) currentTicks / ticksNeeded) * 9);
         } else {currentProgress = 0; }

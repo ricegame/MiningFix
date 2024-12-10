@@ -196,7 +196,7 @@ public class HyApi {
 
             int codeResponse = conn.getResponseCode();
             if (codeResponse != HttpURLConnection.HTTP_OK) {
-                mf.sendMessageWithPrefix(EnumChatFormatting.RED + "Get request for data failed!");
+                mf.sendMessageWithPrefix(EnumChatFormatting.RED + "Get request for data failed! (" + codeResponse + ")");
                 return null;
             }
 
