@@ -2,6 +2,8 @@
 <p style="font-size: larger">
 <em>Fixes</em> some issues with mining in hypixel skyblock
 
+<h2>IMPORTANT: the mod is cooked rn bcs I havn't updated for mining changes I think, idk it just doesnt work well at all</h2>
+
 while I dont think it is, this is probably bannable, if you get banned for using this that's a major skill issue tbh
 
 <b>READ: THE MOD WILL NOT WORK UNTIL THE SERVER STARTS "TICKING"!!! You can see when it starts with the tps hud, whenever that is >0 it means the server is "ticking".</b>
